@@ -14,7 +14,7 @@ case $1 in
 		echo $2 `pwd` >> $aliaes_file
 		;;
 	cd)
-		dest=$(cat $aliaes_file | grep $2 | sed -e "s/^[A-Za-z0-9\.\_\-]* //")
+		dest=$(cat $aliaes_file | grep "^${2} " | head -1 | sed -e "s/^[A-Za-z0-9\.\_\-]* //")
 		if [ -n "$dest" ]; then
 			cd $dest
 		else
