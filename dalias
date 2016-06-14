@@ -1,9 +1,10 @@
 #!/bin/bash
 
+
 aliaes_file="$HOME/.dalias"
 
 if [ ! -f "$aliaes_file" ]; then
-	touch "$aliaes_file"
+  touch "$aliaes_file"
 fi
 
 case $1 in
@@ -14,7 +15,7 @@ case $1 in
 		echo $2 `pwd` >> $aliaes_file
 		;;
 	cd)
-		dest=$(cat $aliaes_file | grep "^${2} " | head -1 | sed -e "s/^[A-Za-z0-9\.\_\-]* //")
+    dest=$(cat $aliaes_file | grep "^${2} " | head -1 | sed -e "s/^[A-Za-z0-9\.\_\-]* //")
 		if [ -n "$dest" ]; then
 			cd $dest
 		else
@@ -24,4 +25,12 @@ case $1 in
 	rm)
 		sed -i '' "/^$2 /d" $aliaes_file
 		;;
+  get)
+    dest=$(cat $aliaes_file | grep "^${2} " | head -1 | sed -e "s/^[A-Za-z0-9\.\_\-]* //")
+		if [ -n "$dest" ]; then
+			echo $dest
+		else
+			echo "$2 not found"
+		fi
+    ;;
 esac
