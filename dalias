@@ -15,7 +15,7 @@ case $1 in
 		echo $2 `pwd` >> $aliaes_file
 		;;
 	cd)
-    dest=$(cat $aliaes_file | grep "^${2} " | head -1 | sed -e "s/^[A-Za-z0-9\.\_\-]* //")
+    dest=$(cat $aliaes_file | grep "^${2} " | head -1 | cut -d " " -f 2)
 		if [ -n "$dest" ]; then
 			cd $dest
 		else
@@ -26,11 +26,21 @@ case $1 in
 		sed -i '' "/^$2 /d" $aliaes_file
 		;;
   get)
-    dest=$(cat $aliaes_file | grep "^${2} " | head -1 | sed -e "s/^[A-Za-z0-9\.\_\-]* //")
+    dest=$(cat $aliaes_file | grep "^${2} " | head -1 | cut -d " " -f 2)
 		if [ -n "$dest" ]; then
 			echo $dest
 		else
 			echo "$2 not found"
 		fi
+    ;;
+  clean)
+    while IFS= read -r line; do
+      dest=$(echo "$line" | cut -d " " -f 2)
+      alias=$(echo "$line" | cut -d " " -f 1)
+      if [ ! -e $dest ]
+      then
+        dalias rm $alias
+      fi
+    done < $aliaes_file
     ;;
 esac
